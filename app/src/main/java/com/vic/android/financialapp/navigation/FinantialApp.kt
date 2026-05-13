@@ -10,20 +10,21 @@ import com.vic.android.financialapp.ui.UserUi
 
 @Composable
 fun FinancialApp() {
-
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = Screen.User.route
+        startDestination = Screen.User.route,
     ) {
         composable(Screen.User.route) {
-            UserScreen(navController,
-                users = listOf(
-                    UserUi("1", "Victor"),
-                    UserUi("2", "Maria"),
-                    UserUi("3", "Juan")
-                ), {}, {}
+            UserScreen(
+                navController = navController,
+                users =
+                    listOf(
+                        UserUi("1", "Victor"),
+                        UserUi("2", "Maria"),
+                        UserUi("3", "Juan"),
+                    ),
             )
         }
     }

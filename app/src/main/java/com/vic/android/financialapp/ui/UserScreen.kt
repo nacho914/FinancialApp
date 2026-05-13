@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.vic.android.financialapp.ui.theme.Background
@@ -60,9 +61,8 @@ import com.vic.android.financialapp.ui.theme.TextSecondary
 @Composable
 fun UserScreen(
     navController: NavHostController,
+    viewModel: UserViewModel = viewModel(),
     users: List<UserUi>,
-    onUserClick: (UserUi) -> Unit,
-    onAddUserClick: () -> Unit,
 ) {
     Column(
         modifier =
@@ -77,8 +77,7 @@ fun UserScreen(
                                 Background,
                             ),
                     ),
-                )
-                .padding(horizontal = Space24),
+                ).padding(horizontal = Space24),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(ButtonHeight))
@@ -140,7 +139,7 @@ fun UserScreen(
                 items(users) { user ->
                     UserCard(
                         user = user,
-                        onClick = { onUserClick(user) },
+                        onClick = { },
                     )
                 }
             }
@@ -149,7 +148,7 @@ fun UserScreen(
         Spacer(modifier = Modifier.height(Space24))
 
         Button(
-            onClick = onAddUserClick,
+            onClick = { },
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -245,8 +244,6 @@ fun UserScreenPreview() {
                     UserUi("2", "Maria"),
                     UserUi("3", "Juan"),
                 ),
-            onUserClick = {},
-            onAddUserClick = {},
         )
     }
 }
