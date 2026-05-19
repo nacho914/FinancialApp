@@ -5,8 +5,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.vic.android.financialapp.ui.UserScreen
-import com.vic.android.financialapp.ui.UserUi
+import com.vic.android.financialapp.ui.screens.users.UserScreen
+import com.vic.android.financialapp.ui.screens.users.UserUi
 
 @Composable
 fun FinancialApp() {

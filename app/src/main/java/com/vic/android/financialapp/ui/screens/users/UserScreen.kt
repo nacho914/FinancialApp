@@ -1,4 +1,4 @@
-package com.vic.android.financialapp.ui
+package com.vic.android.financialapp.ui.screens.users
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
