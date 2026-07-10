@@ -21,10 +21,10 @@ object DatabaseModule {
         @ApplicationContext context: Context,
     ): FinancialDatabase {
         return Room.databaseBuilder(
-            context,
-            FinancialDatabase::class.java,
-            "financial_database"
-        ).build()
+                context,
+                FinancialDatabase::class.java,
+                "financial_database"
+            ).fallbackToDestructiveMigration(true).build()
     }
 
     @Provides

@@ -6,7 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vic.android.financialapp.ui.screens.users.UserScreen
-import com.vic.android.financialapp.ui.screens.users.UserUi
 
 @Composable
 fun FinancialApp() {
@@ -18,13 +17,7 @@ fun FinancialApp() {
     ) {
         composable(Screen.User.route) {
             UserScreen(
-                navController = navController,
-                users =
-                    listOf(
-                        UserUi("1", "Victor"),
-                        UserUi("2", "Maria"),
-                        UserUi("3", "Juan"),
-                    ),
+                navController = navController
             )
         }
     }

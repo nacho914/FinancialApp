@@ -7,7 +7,7 @@ import com.vic.android.financialapp.data.local.entity.UserEntity
 
 @Database(
     entities = [UserEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 abstract class FinancialDatabase : RoomDatabase() {

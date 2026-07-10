@@ -27,6 +27,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.vic.android.financialapp.domain.model.User
 import com.vic.android.financialapp.ui.theme.Background
 import com.vic.android.financialapp.ui.theme.Border
 import com.vic.android.financialapp.ui.theme.CardBackground
@@ -62,8 +65,9 @@ import com.vic.android.financialapp.ui.theme.TextSecondary
 fun UserScreen(
     navController: NavHostController,
     viewModel: UserViewModel = hiltViewModel(),
-    users: List<UserUi>,
 ) {
+    val users by viewModel.users.collectAsState(initial = emptyList())
+
     Column(
         modifier =
             Modifier
@@ -180,7 +184,7 @@ fun UserScreen(
 
 @Composable
 fun UserCard(
-    user: UserUi,
+    user: User,
     onClick: () -> Unit,
 ) {
     Card(
@@ -218,7 +222,7 @@ fun UserCard(
             Spacer(modifier = Modifier.width(Space16))
 
             Text(
-                text = user.name,
+                text = user.firstName + " " + user.lastName,
                 color = TextPrimary,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium,
@@ -227,23 +231,12 @@ fun UserCard(
     }
 }
 
-data class UserUi(
-    val id: String,
-    val name: String,
-)
-
 @Preview
 @Composable
 fun UserScreenPreview() {
     FinancialAppTheme {
         UserScreen(
             navController = rememberNavController(),
-            users =
-                listOf(
-                    UserUi("1", "Victor"),
-                    UserUi("2", "Maria"),
-                    UserUi("3", "Juan"),
-                ),
         )
     }
 }
