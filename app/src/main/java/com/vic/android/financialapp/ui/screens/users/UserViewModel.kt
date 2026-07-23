@@ -14,16 +14,6 @@ class UserViewModel @Inject constructor(
 
     val users = userRepository.getUsers()
 
-    init {
-        viewModelScope.launch {
-            //userRepository.deleteAllUsers()
-            userRepository.insertUser(
-                firstName = "Victor",
-                lastName = "Paez",
-            )
-        }
-    }
-
     fun deleteUser(id: String) {
         viewModelScope.launch {
             userRepository.deleteUser(id)

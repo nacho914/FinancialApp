@@ -46,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.vic.android.financialapp.domain.model.User
+import com.vic.android.financialapp.navigation.Screen
 import com.vic.android.financialapp.ui.components.ConfirmationDialog
 import com.vic.android.financialapp.ui.theme.Background
 import com.vic.android.financialapp.ui.theme.Border
@@ -155,7 +156,7 @@ fun UserScreen(
                     UserCard(
                         user = user,
                         onClick = { },
-                        onDeleteClick = { userToDelete = user }
+                        onDeleteClick = { userToDelete = user },
                     )
                 }
             }
@@ -164,7 +165,7 @@ fun UserScreen(
         Spacer(modifier = Modifier.height(Space24))
 
         Button(
-            onClick = { },
+            onClick = { navController.navigate(Screen.AddUser.route) },
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -205,9 +206,8 @@ fun UserScreen(
                 },
                 onDismiss = {
                     userToDelete = null
-                }
+                },
             )
-
         }
     }
 }
@@ -216,28 +216,30 @@ fun UserScreen(
 fun UserCard(
     user: User,
     onClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
 ) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = CardBackground,
-        ),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = CardBackground,
+            ),
         shape = RoundedCornerShape(CardRadius),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Space16),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(Space16),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-
             Box(
-                modifier = Modifier
-                    .size(UserAvatarSize)
-                    .clip(CircleShape)
-                    .background(Border),
+                modifier =
+                    Modifier
+                        .size(UserAvatarSize)
+                        .clip(CircleShape)
+                        .background(Border),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
@@ -260,12 +262,12 @@ fun UserCard(
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(
-                onClick = onDeleteClick
+                onClick = onDeleteClick,
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete user",
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         }

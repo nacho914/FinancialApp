@@ -15,34 +15,36 @@ import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(
-    private val userDao: UserDao,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : UserRepository {
+class UserRepositoryImpl
+    @Inject
+    constructor(
+        private val userDao: UserDao,
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    ) : UserRepository {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun getUsers(): Flow<List<User>> = userDao.getUsers().map { users -> users.map { it.toDomain() } }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun getUsers(): Flow<List<User>> =
-        userDao.getUsers().map { users -> users.map { it.toDomain() } }
-
-
-    override suspend fun insertUser(firstName: String, lastName: String) {
-        userDao.insertUser(
-            UserEntity(
-                id = UUID.randomUUID().toString(),
-                firstName = firstName,
-                lastName = lastName,
-                createdAt = System.currentTimeMillis(),
-                updatedAt = System.currentTimeMillis(),
+        override suspend fun insertUser(
+            firstName: String,
+            lastName: String,
+        ) = withContext(ioDispatcher) {
+            userDao.insertUser(
+                UserEntity(
+                    id = UUID.randomUUID().toString(),
+                    firstName = firstName,
+                    lastName = lastName,
+                    createdAt = System.currentTimeMillis(),
+                    updatedAt = System.currentTimeMillis(),
+                ),
             )
-        )
-    }
-
-    override suspend fun deleteAllUsers() {
-        userDao.deleteAllUsers()
-    }
-
-    override suspend fun deleteUser(id: String) =
-        withContext(ioDispatcher) {
-            userDao.deleteUser(id)
         }
-}
+
+        override suspend fun deleteAllUsers() {
+            userDao.deleteAllUsers()
+        }
+
+        override suspend fun deleteUser(id: String) =
+            withContext(ioDispatcher) {
+                userDao.deleteUser(id)
+            }
+    }
