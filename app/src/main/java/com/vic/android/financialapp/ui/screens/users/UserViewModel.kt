@@ -24,5 +24,10 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun deleteUser(id: String) {
+        viewModelScope.launch {
+            userRepository.deleteUser(id)
+        }
+    }
 }
 

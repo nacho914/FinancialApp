@@ -10,4 +10,6 @@ interface UserRepository {
     suspend fun insertUser(firstName: String, lastName: String)
 
     suspend fun deleteAllUsers()
+
+    suspend fun deleteUser(id: String)
 }

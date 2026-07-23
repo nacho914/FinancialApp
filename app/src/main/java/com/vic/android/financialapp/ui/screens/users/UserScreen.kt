@@ -19,16 +19,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.vic.android.financialapp.domain.model.User
+import com.vic.android.financialapp.ui.components.ConfirmationDialog
 import com.vic.android.financialapp.ui.theme.Background
 import com.vic.android.financialapp.ui.theme.Border
 import com.vic.android.financialapp.ui.theme.CardBackground
@@ -67,6 +74,10 @@ fun UserScreen(
     viewModel: UserViewModel = hiltViewModel(),
 ) {
     val users by viewModel.users.collectAsState(initial = emptyList())
+
+    var userToDelete by remember {
+        mutableStateOf<User?>(null)
+    }
 
     Column(
         modifier =
@@ -144,6 +155,7 @@ fun UserScreen(
                     UserCard(
                         user = user,
                         onClick = { },
+                        onDeleteClick = { userToDelete = user }
                     )
                 }
             }
@@ -179,6 +191,24 @@ fun UserScreen(
                 fontWeight = FontWeight.SemiBold,
             )
         }
+
+        userToDelete?.let { user ->
+
+            ConfirmationDialog(
+                title = "Delete user",
+                message = "Are you sure you want to delete ${user.firstName} ${user.lastName}?",
+                confirmText = "Delete",
+                dismissText = "Cancel",
+                onConfirm = {
+                    viewModel.deleteUser(user.id.toString())
+                    userToDelete = null
+                },
+                onDismiss = {
+                    userToDelete = null
+                }
+            )
+
+        }
     }
 }
 
@@ -186,29 +216,28 @@ fun UserScreen(
 fun UserCard(
     user: User,
     onClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        colors =
-            CardDefaults.cardColors(
-                containerColor = CardBackground,
-            ),
+        colors = CardDefaults.cardColors(
+            containerColor = CardBackground,
+        ),
         shape = RoundedCornerShape(CardRadius),
     ) {
         Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(Space16),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Space16),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+
             Box(
-                modifier =
-                    Modifier
-                        .size(UserAvatarSize)
-                        .clip(CircleShape)
-                        .background(Border),
+                modifier = Modifier
+                    .size(UserAvatarSize)
+                    .clip(CircleShape)
+                    .background(Border),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
@@ -222,11 +251,23 @@ fun UserCard(
             Spacer(modifier = Modifier.width(Space16))
 
             Text(
-                text = user.firstName + " " + user.lastName,
+                text = "${user.firstName} ${user.lastName}",
                 color = TextPrimary,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium,
             )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(
+                onClick = onDeleteClick
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete user",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
         }
     }
 }
